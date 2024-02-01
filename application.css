@@ -89,6 +89,12 @@ button:hover {
     transform: translateX(-50%);
 }
 
+#date {
+    width: 100%;
+    max-width: 400px;
+    height: 200px;
+}
+
 select {
     width: 100%;
     max-width: 400px;

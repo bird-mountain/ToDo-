@@ -53,12 +53,12 @@ div.input-ui {
 }
 
 button {
-    width: 100%; /* ボタンの幅を親コンテナの90%に設定 */
+    width: 370px; /* ボタンの幅を親コンテナの90%に設定 */
     max-width: 400px; /* ボタンの最大幅を400pxに設定 */
     margin: 5px 0; /* 上下のマージンを設定 */
     padding: 10px 20px; /* パディングを設定 */
     border: none; /* ボーダーを消す */
-    background-color: #c86565; /* レトロ風の赤色に変更 */
+    background-color: #cc7070f9; /* レトロ風の赤色に変更 */
     color: white; /* 文字色を白に設定 */
     font-size: 16px; /* フォントサイズを設定 */
     cursor: pointer; /* カーソルをポインタに設定 */
@@ -68,7 +68,7 @@ button {
 }
 
 button:hover {
-    background-color: #c86565; /* ホバー時の背景色を濃い赤色に変更 */
+    background-color: #c12e2e; /* ホバー時の背景色を濃い赤色に変更 */
 }
 
 #topimg {
@@ -91,13 +91,13 @@ button:hover {
 }
 
 #date {
-    width: 100%;
+    width: 370px;
     max-width: 400px;
     height: 40px;
 }
 
 select {
-    width: 100%;
+    width: 370px;
     max-width: 400px;
     height: 40px;
     margin: 10px 0;
@@ -108,7 +108,7 @@ select {
 }
 
 input {
-    width: 100%;
+    width: 370px;
     max-width: 400px;
     margin: 10px 0;
     padding: 10px;

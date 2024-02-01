@@ -2,6 +2,7 @@ html {
     -ms-text-size-adjust: 100%;
     -webkit-text-size-adjust: 100%;
     font-family: "Yusei Magic", sans-serif; /* フォントを指定 */
+    color: #000000bd;
 }
 
 body {
@@ -13,7 +14,7 @@ body {
     padding: 0px 50px; /* 内側の余白を設定 */
     text-align: center; /* テキストを中央揃えに設定 */
     /* background-color: #f0f0f0; /*背景色をレトロ風の灰色に変更 */
-    background-image: url('icon.jpg');
+    background-image: url('star.jpg');
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -92,12 +93,13 @@ button:hover {
 #date {
     width: 100%;
     max-width: 400px;
-    height: 200px;
+    height: 40px;
 }
 
 select {
     width: 100%;
     max-width: 400px;
+    height: 40px;
     margin: 10px 0;
     padding: 10px;
     border: 1px solid #ccc;
@@ -149,4 +151,6 @@ div.loader {
       background-position: left;
     }
   }
+
+  
   

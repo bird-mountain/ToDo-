@@ -1,31 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ToDoリマインダー</title>
-</head>
-
 <html lang="ja">
 
 <head>
-  <meta charset="utf-8" />
-  <title>WebAppTemplate</title>
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>ToDoリマインダー</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Yusei+Magic&display=swap" />
   <link rel="stylesheet" href="application.css" />
   <!-- <link rel="stylesheet" href="style.css" /> -->
 </head>
 
-<body style="background-image: url('icon.jpg');">
-  <h1>タスクリマインダー<i class="fa-solid fa-house-user"></i></h1>
+<body style="background-image: url('star.jpg');">
+  <h1>ToDoリマインダー<i class="fa-solid fa-house-user"></i></h1>
   <div id="topimg">
   <img id="icon" src="icon.jpg" />
-  <iframe id="sheet"
+  <!-- <iframe id="sheet"
     src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSGgnMIFpaq46NstdItm-D2cRNytUX9hIKNafqzLb35XIzge237eacVNCFt_qk_eROp6qotnwtvvp5v/pubhtml?gid=0&amp;single=true&amp;widget=true&amp;headers=false"
-    style="width:410px; height:100%"></iframe>
+    style="width:410px; height:100%"></iframe> -->
   </div>
 
   <p>課題の記録</p>
@@ -63,7 +55,7 @@
   <input type="text" id="TextBox" placeholder="ex.クラスルーム" /><br><br>
 
   <!-- 送信ボタン -->
-  <button id="sheetbot">履歴</button><br>
+  <button id="sheetbot">履歴・更新<br>(反映まで時間がかかる場合があります。)</button><br>
   <button id="sub">送信</button>
   <div id="IsBusy" class="loader"></div><br>
   <p id="ResMsg">入力してください。</p>
@@ -79,39 +71,38 @@
       // Google Apps ScriptのWebアプリのAPI ID
       const API_ID = "AKfycbwhJja0fYjuI8Jgy_LXO7aqlk4WGqDBBPtag9PHWP6IIwN9BezmySb6svWlHPSxW7cd";
       // APIのURL
-      const API_URL = `https://script.google.com/macros/s/${API_ID}/exec?action=a&`;
-
-      document.getElementById("sheet").style.display = "none";
+      const API_URL = `https://script.google.com/macros/s/${API_ID}/exec?`;
 
       function showsheet() {
 
-        if (document.getElementById("sheet").style.display == "block"){
+        if (document.getElementById("sheet") != undefined){
           document.getElementById("sheet").style.display = "none";
+          document.getElementById("sheet").remove();
           document.getElementById("icon").style.display = "block";
         }else{
         document.getElementById("icon").style.display = "none";
+        icon.insertAdjacentHTML("afterend", 
+        '<iframe id="sheet"src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSGgnMIFpaq46NstdItm-D2cRNytUX9hIKNafqzLb35XIzge237eacVNCFt_qk_eROp6qotnwtvvp5v/pubhtml?gid=0&amp;single=true&amp;widget=true&amp;headers=false"style="width:410px; height:100%"></iframe>'
+        );
         document.getElementById("sheet").style.display = "block";
         }
       }
 
       function submitForm() {
 
-        if (document.getElementById("sheet").style.display == "block"){
-          document.getElementById("sheet").style.display = "block";
-        }
-
         let date = document.getElementById("date").value;
         let subject = document.getElementById("subject").value;
 
         if (date <= 0 || subject == "") {
-          alert("入力しろ！！あぁん(ꐦ°᷄д°᷅)");
+          alert("入力してください。（゜ー゜i）");
           return;
         }
 
         // 処理中メッセージを表示
-        $("#ResMsg").textContent = "...処理中...";
+        // $("#ResMsg").textContent = "...処理中...";
         $("#IsBusy").style.display = "flex"; // 処理中の表示を有効化
-        $("#sub").style.display = "none"; // 送信ボタンを非表示に
+        $("#sub").style.display = "none";
+        $("#sheetbot").style.display = "none"; // 送信ボタンを非表示に
 
 
 
@@ -144,6 +135,7 @@
             // 処理中の表示を無効化し、ユーザー入力UIを表示
             $("#IsBusy").style.display = "none";
             $("#sub").style.display = "";
+            $("#sheetbot").style.display = "";
           });
 
         // fetch(URL, { method: "GET", mode: "no-cors" })

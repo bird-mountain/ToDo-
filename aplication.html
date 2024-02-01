@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ToDoリマインダー</title>
+</head>
+
+<html lang="ja">
+
+<head>
+  <meta charset="utf-8" />
+  <title>WebAppTemplate</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Yusei+Magic&display=swap" />
+  <link rel="stylesheet" href="application.css" />
+  <!-- <link rel="stylesheet" href="style.css" /> -->
+</head>
+
+<body style="background-image: url('icon.jpg');">
+  <h1>タスクリマインダー<i class="fa-solid fa-house-user"></i></h1>
+  <div id="topimg">
+  <img id="icon" src="icon.jpg" />
+  <iframe id="sheet"
+    src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSGgnMIFpaq46NstdItm-D2cRNytUX9hIKNafqzLb35XIzge237eacVNCFt_qk_eROp6qotnwtvvp5v/pubhtml?gid=0&amp;single=true&amp;widget=true&amp;headers=false"
+    style="width:410px; height:100%"></iframe>
+  </div>
+
+  <p>課題の記録</p>
+
+  <!-- 日付 -->
+  <input type="date" id="date" name="date"><br>
+
+  <!-- 選択肢 -->
+  <!-- <label for="subject">教科:</label> -->
+  <select id="subject" name="subject">
+    <option value="" selected disabled>教科</option>
+    <option value="材料力学">材料力学</option>
+    <option value="数値計算">数値計算</option>
+    <option value="保健・体育">保健・体育</option>
+    <option value="英語Ⅳ">英語Ⅳ</option>
+    <option value="熱力学">熱力学</option>
+    <option value="電磁気学">電磁気学</option>
+    <option value="電気回路Ⅱ">電気回路Ⅱ</option>
+    <option value="応用数学Ⅰ">応用数学Ⅰ</option>
+    <option value="応用物理Ⅰ">応用物理Ⅰ</option>
+    <option value="電子回路">電子回路</option>
+    <option value="制御工学">制御工学</option>
+    <option value="流体力学">流体力学</option>
+    <option value="法と経済">法と経済</option>
+    <option value="電子機械工学実験Ⅰ">電子機械工学実験Ⅰ</option>
+    <option value="一般化学">一般化学</option>
+    <option value="社会文化論">社会文化論</option>
+    <option value="数学解析">数学解析</option>
+    <option value="英語演習">英語演習</option>
+    <option value="言語と文化">言語と文化</option>
+
+  </select><br>
+
+  <!-- 自由に書き込める -->
+  <input type="text" id="TextBox" placeholder="ex.クラスルーム" /><br><br>
+
+  <!-- 送信ボタン -->
+  <button id="sheetbot">履歴</button><br>
+  <button id="sub">送信</button>
+  <div id="IsBusy" class="loader"></div><br>
+  <p id="ResMsg">入力してください。</p>
+
+  <script>
+    window.onload = function () {
+
+      // $関数: 指定された要素を取得するための簡略化された関数
+      function $(e) {
+        return document.querySelector(e);
+      }
+
+      // Google Apps ScriptのWebアプリのAPI ID
+      const API_ID = "AKfycbwhJja0fYjuI8Jgy_LXO7aqlk4WGqDBBPtag9PHWP6IIwN9BezmySb6svWlHPSxW7cd";
+      // APIのURL
+      const API_URL = `https://script.google.com/macros/s/${API_ID}/exec?action=a&`;
+
+      document.getElementById("sheet").style.display = "none";
+
+      function showsheet() {
+
+        if (document.getElementById("sheet").style.display == "block"){
+          document.getElementById("sheet").style.display = "none";
+          document.getElementById("icon").style.display = "block";
+        }else{
+        document.getElementById("icon").style.display = "none";
+        document.getElementById("sheet").style.display = "block";
+        }
+      }
+
+      function submitForm() {
+
+        if (document.getElementById("sheet").style.display == "block"){
+          document.getElementById("sheet").style.display = "block";
+        }
+
+        let date = document.getElementById("date").value;
+        let subject = document.getElementById("subject").value;
+
+        if (date <= 0 || subject == "") {
+          alert("入力しろ！！あぁん(ꐦ°᷄д°᷅)");
+          return;
+        }
+
+        // 処理中メッセージを表示
+        $("#ResMsg").textContent = "...処理中...";
+        $("#IsBusy").style.display = "flex"; // 処理中の表示を有効化
+        $("#sub").style.display = "none"; // 送信ボタンを非表示に
+
+
+
+
+
+        date = encodeURIComponent(date);
+        subject = encodeURIComponent(subject);
+
+        let URL = `${API_URL}`;
+        let memo = $("#TextBox").value;
+
+        URL += `date=${date}&subject=${subject}`;
+
+        // メモが入力されていればURLに追加
+        if (memo.length > 0) {
+          let encodedMemo = encodeURIComponent(memo);
+          URL += `&memo=${encodedMemo}`;
+          $("#TextBox").value = ""; // テキストボックスをクリア
+        }
+        console.log(URL);
+
+        // リクエストを送信し、レスポンスを処理
+        fetch(URL, { method: "GET" })
+          .then((res) => res.text())
+          .then((res) => {
+            console.log(res);
+            let obj = JSON.parse(res);
+            // 結果メッセージを表示
+            $("#ResMsg").textContent = "送信しました";
+            // 処理中の表示を無効化し、ユーザー入力UIを表示
+            $("#IsBusy").style.display = "none";
+            $("#sub").style.display = "";
+          });
+
+        // fetch(URL, { method: "GET", mode: "no-cors" })
+        //   .then((res) => res.text())
+        //   .then((res) => { console.log(res) });
+
+
+        // フォームのリセット
+        document.getElementById("date").value = "";
+        document.getElementById("subject").selectedIndex = 0;
+      }
+
+      document.getElementById("sub").onclick = () => submitForm()
+      document.getElementById("sheetbot").onclick = () => showsheet()
+
+
+
+
+
+    }
+
+    // <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSGgnMIFpaq46NstdItm-D2cRNytUX9hIKNafqzLb35XIzge237eacVNCFt_qk_eROp6qotnwtvvp5v/pubhtml?gid=0&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
+
+  </script>
+
+</body>
+
+</html>
